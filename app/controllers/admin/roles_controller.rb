@@ -6,15 +6,14 @@ class Admin::RolesController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:users, :remove_user, :add_user]
   def index
     @roles = Role.find(:all)
-    @role = Role.new
   end
   
   def show
-    redirect_to edit_admin_role_path(params[:id])
+    @role = Role.find(params[:id])
   end
   
   def edit
-    @role = Role.find(params[:id])
+    
   end
   def new
     
@@ -39,7 +38,7 @@ class Admin::RolesController < ApplicationController
   
   def destroy
     @role = Role.find(params[:id])
-    @role.destroy unless @role.standard?
+    @role.destroy unless Role::RADIANT_STANDARDS.include?(@role.role_name)
     redirect_to admin_roles_path()
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'The specified Role could not be found.'

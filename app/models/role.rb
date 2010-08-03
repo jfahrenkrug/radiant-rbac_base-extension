@@ -10,10 +10,10 @@ class Role < ActiveRecord::Base
   
   before_destroy :verify_non_standard
   
-  RADIANT_STANDARDS = ['admin', 'designer']
+  RADIANT_STANDARDS = ['admin', 'developer']
   
   def verify_non_standard
-    if standard?
+    if RADIANT_STANDARDS.include?(self[:role_name].to_s)
       raise Role::ProtectedRoleError, "`#{self[:role_name]}' is a protected role and may not be removed."
     end
   end
